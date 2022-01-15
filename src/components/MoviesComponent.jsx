@@ -4,12 +4,22 @@ import {getMovies} from '../services/fakeMovieService';
 
 class MoviesComponent extends Component {
     state = {
-        movies:getMovies(),
+        movies:getMovies(),//is array;
     }
 
     handleDelete = (movieId) => {
         const movies = this.state.movies.filter(m => m._id !== movieId);
         this.setState({movies});
+    }
+
+    handleFavorite = (movieId) => {
+        const movies = this.state.movies.map( m => {
+            if(m._id === movieId){
+                m.favorite === false ? m.favorite = true : m.favorite = false;
+            }
+            return m;
+        })
+        this.setState({movies})
     }
 
     render() { 
@@ -38,7 +48,9 @@ class MoviesComponent extends Component {
                                         stock={m.numberInStock}
                                         rate={m.dailyRentalRate}
                                         id={m._id}
-                                        handleDelete={this.handleDelete}
+                                        onDelete={this.handleDelete}
+                                        onFavorite={this.handleFavorite}
+                                        fav={m.favorite}
                                     />
                                 </tr>
                             )
